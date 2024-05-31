@@ -1,9 +1,9 @@
 FROM hackmdio/buildpack:node-10-95fb3df8 as BUILD
 
 COPY --chown=hackmd:hackmd . .
+ENV QT_QPA_PLATFORM=offscreen
 
 RUN set -xe && \
-    git reset --hard && \
     git clean -fx && \
     npm install && \
     npm run build && \
@@ -16,6 +16,7 @@ RUN set -xe && \
 
 FROM hackmdio/runtime:node-10-cjk-95fb3df8
 USER hackmd
+ENV QT_QPA_PLATFORM=offscreen
 WORKDIR /home/hackmd/app
 COPY --chown=1500:1500 --from=BUILD /home/hackmd/app .
 
